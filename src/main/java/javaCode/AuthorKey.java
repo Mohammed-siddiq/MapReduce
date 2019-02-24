@@ -14,8 +14,8 @@ public class AuthorKey implements WritableComparable<AuthorKey> {
     Text a2Name;
 
     public AuthorKey(Text a1Name, Text a2Name) {
-        this.a1Name.set(a1Name);
-        this.a2Name.set(a2Name);
+        this.a1Name = a1Name;
+        this.a2Name = a2Name;
 
     }
 
@@ -59,5 +59,10 @@ public class AuthorKey implements WritableComparable<AuthorKey> {
         this.a1Name.readFields(dataInput);
         this.a2Name.readFields(dataInput);
 
+    }
+    @Override
+    public String toString() {
+
+        return a1Name.toString() + ":" + a2Name.toString();
     }
 }

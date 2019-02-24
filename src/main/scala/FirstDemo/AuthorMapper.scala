@@ -27,11 +27,7 @@ class AuthorMapper extends Mapper[LongWritable, Text, AuthorKey, IntWritable] {
   }
 
   def generateAuthorMapping(authors: List[String]): List[(String, String)] = {
-    for {
-      a1 <- authors
-      a2 <- authors
-      if (!a1.equals(a2))
-    } yield (a1, a2)
+    authors.combinations(2).map{ case Seq(x, y) => (x, y) }.toList
   }
 
   override def map(key: LongWritable, value: Text, context: Mapper[LongWritable, Text, AuthorKey, IntWritable]#Context): Unit = {
@@ -52,7 +48,10 @@ class AuthorMapper extends Mapper[LongWritable, Text, AuthorKey, IntWritable] {
 <url>db/conf/icst/icst2013.html#GrechanikHB13</url>
 </inproceedings>
      */
-
+//    val a1 = new Text()
+//b
+//    /** The state text. */
+//    val a2 = new Text()
 
     //    val test = "    <inproceedings mdate=\"2017-05-24\" key=\"conf/icst/GrechanikHB13\">\n<author>Mark Grechanik</author>\n<author>B. M. Mainul Hossain</author>\n<author>Ugo Buy</author>\n<title>Testing Database-Centric Applications for Causes of Database Deadlocks.</title>\n<pages>174-183</pages>\n<year>2013</year>\n<booktitle>ICST</booktitle>\n<ee>https://doi.org/10.1109/ICST.2013.19</ee>\n<ee>http://doi.ieeecomputersociety.org/10.1109/ICST.2013.19</ee>\n<crossref>conf/icst/2013</crossref>\n<url>db/conf/icst/icst2013.html#GrechanikHB13</url>\n</inproceedings>"
     //    val proceedingsXML = XML.loadString(test)
@@ -66,7 +65,10 @@ class AuthorMapper extends Mapper[LongWritable, Text, AuthorKey, IntWritable] {
     val one = new IntWritable(1)
 
     // Mapper writing all pairs of CS authors working on the processed paper
-    for (mapping <- authorMappings) context.write(new AuthorKey(new Text(mapping._1), new Text(mapping._2)), one)
+    for (mapping <- authorMappings) {
+      val aKey = new AuthorKey(new Text(mapping._1), new Text(mapping._2))
+      println("writing Key: " , aKey)
+      context.write(aKey, one)}
 
 
   }
